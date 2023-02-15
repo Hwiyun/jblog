@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+	<resultMap id="findAllList" type="postvo">
+		<id property="no" column="no" />
+		<result property="title" column="title" />
+		<result property="contents" column="contents" />
+		<result property="regDate" column="reg_date" />
+		<result property="categoryNo" column="category_no" />
+	</resultMap>
+		
+
+	<insert id ="insert" parameterType="String">
+		<![CDATA[
+			insert
+			into post
+			values (null, #{title }, #{contents }, now(), #{category_no })
+		]]>
+	</insert>
+	
+	<select id="findByIdDefaultList" resultType="postvo" parameterType="string">
+	<![CDATA[
+		select p.no, p.title, p.contents, p.reg_date, p.category_no as categoryNo
+		from post p
+		join category c on p.category_no = c.no 
+		where c.id = #{id } 
+		and c.name = '${id }의 카테고리'
+		order by no desc
+	]]>
+	</select>
+	
+		<select id="findByIdCategoryList" resultType="postvo" parameterType="map">
+	<![CDATA[
+		select p.no, p.title, p.contents, p.reg_date, p.category_no as categoryNo
+		from post p
+		join category c on p.category_no = c.no 
+		where c.id = #{id }
+		and p.category_no = #{categoryNo }
+	]]>
+	</select>
+	
+	<select id="findByAllList" resultType="postvo" parameterType="map">
+	<![CDATA[
+		select p.no, p.title, p.contents, p.reg_date, p.category_no as categoryNo
+		from post p
+		join category c on p.category_no = c.no 
+		where c.id = #{id }
+		and p.category_no = #{categoryNo }
+		and p.no = #{postNo }
+	]]>
+	</select>
+    
+	<select id="findByPostNoNull" resultMap="findAllList" parameterType="map">
+	<![CDATA[
+		select p.no, p.title, p.contents, p.reg_date, p.category_no as categoryNo
+		from post p
+		join category c on p.category_no = c.no
+	    where c.id = #{id }
+	    and p.category_no = #{categoryNo }
+		order by p.no desc
+	    limit 0, 1
+    ]]>
+	</select>
+	
+    <select id="findByPostNoAndCategoryNoNull" resultMap="findAllList" parameterType="map">
+   <![CDATA[
+	    select p.no, p.title, p.contents, p.reg_date, p.category_no as categoryNo
+		from post p
+		join category c on p.category_no = c.no
+	    where c.id = #{id }
+	    and p.category_no = #{categoryNo }
+	    and p.no = #{postNo }
+		order by p.no desc, category_no asc
+	    limit 0, 1
+    ]]>
+    </select>
+    
+    <select id="findByNotNull" resultMap="findAllList" parameterType="string">
+  	<![CDATA[
+	  	select p.no, p.title, p.contents, p.reg_date, p.category_no as categoryNo
+		from post p
+		join category c on p.category_no = c.no
+	    where c.id = #{id}
+		order by p.no desc, category_no asc
+	    limit 0, 1
+    ]]>
+	</select>
+
+
+	<insert id="writePost" parameterType="postvo">
+	<![CDATA[
+	insert
+	into post
+	values (null, #{title }, #{contents }, now(), #{categoryNo })
+	]]>
+	</insert>
+
+	<select id="showPost" resultType="postvo" parameterType="string">
+	<![CDATA[
+		select p.no, p.title, p.contents, p.reg_date 
+		from category c 
+		join post p 
+		on c.no = p.category_no 
+		where c.id = #{id } 
+		and c.name = '${id }의 카테고리'
+		order by p.no desc
+		limit 0,1
+	]]>
+	</select>
+<!-- 	
+	<selectKey keyProperty="no"  resultType="long" order="AFTER">
+		<![CDATA[
+		select last_insert_id()
+		]]>
+	</selectKey>
+	
+	
+	
+	select no from category where name = #{name } and id = #{id }
+	
+	
+	
+	
+	
+	<delete id="deleteByNoAndPassword" parameterType="map">
+		<![CDATA[
+			delete from post where no = #{no } and password = #{password }
+		]]>
+	</delete>	
+-->	
+</mapper>
