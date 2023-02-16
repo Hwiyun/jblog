@@ -18,7 +18,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-//	jblog04/user/join
+//	jblog05/user/join
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join() {
 		return "user/join";
@@ -35,7 +35,7 @@ public class UserController {
 		return "redirect:/user/joinsuccess";
 	}
 	
-//	jblog04/user/joinsuccess
+//	jblog05/user/joinsuccess
 	@RequestMapping("/joinsuccess")
 	public String joinSuccess() {
 		return "user/joinsuccess";
